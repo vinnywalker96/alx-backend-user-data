@@ -17,6 +17,7 @@ def status() -> str:
 @app_views.route('/stats/', strict_slashes=False)
 def stats() -> str:
     """ GET /api/v1/stats
+    abort(401)
     Return:
       - the number of each objects
     """
@@ -24,3 +25,9 @@ def stats() -> str:
     stats = {}
     stats['users'] = User.count()
     return jsonify(stats)
+
+
+@app_views.route('/unathorized', strict_slashes=False)
+def unathorized():
+    """Unathorised"""
+    return abort(401)
