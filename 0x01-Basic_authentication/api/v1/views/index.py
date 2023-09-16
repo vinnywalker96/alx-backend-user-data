@@ -31,4 +31,3 @@ def stats() -> str:
 def unathorized_access():
     """Unathorised"""
     abort(401)
-    
