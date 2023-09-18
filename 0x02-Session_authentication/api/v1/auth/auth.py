@@ -39,5 +39,5 @@ class Auth:
         """Returns Cookie"""
         if request is None:
             return None
-        session = os.environ.get('SESSION_NAME', '_my_session_id')
-        return request.cookies.get(session)
+        session_name = os.getenv('SESSION_NAME')
+        return request.cookies.get(session_name)

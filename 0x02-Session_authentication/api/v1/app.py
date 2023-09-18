@@ -17,27 +17,27 @@ app.register_blueprint(app_views)
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 auth = None
 auth = SessionAuth()
-app.config['SESSION_NAME'] = _my_session_id
-excluded_paths = [
-        '/api/v1/status/',
-        '/api/v1/unauthorized/',
-        '/api/v1/forbidden/'
-        ]
 
 
 @app.before_request
 def authenticate():
     """ filtering of each request"""
+    excluded_paths = [
+            '/api/v1/status/',
+            '/api/v1/unauthorized/',
+            '/api/v1/forbidden/',
+            '/api/v1/auth_session/login/'
+        ]
     if auth is None:
         return
 
     path = request.path
     request.current_user = auth.current_user(request)
-
     if auth.require_auth(path, excluded_paths) is False:
         return
 
-    if auth.authorization_header(request) is None:
+    if auth.authorization_header(request) and auth.session_cookie(
+            request):
         abort(401)
 
     if auth.current_user(request) is None:
