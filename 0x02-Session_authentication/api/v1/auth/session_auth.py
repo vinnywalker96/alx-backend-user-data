@@ -26,3 +26,12 @@ class SessionAuth(Auth):
             return None
         user = self.user_id_by_session_id.get(session_id)
         return user
+
+    def current_user(self, request=None):
+        """overload) that returns a User"""
+        if request is None:
+            return None
+        cookie = self.session_cookie(request)
+        user_id = self.user_id_by_session_id(cookie)
+        user = User.get(user_id)
+        return user
