@@ -17,7 +17,7 @@ app.register_blueprint(app_views)
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 auth = None
 auth = SessionAuth()
-
+app.config['SESSION_NAME'] = _my_session_id
 excluded_paths = [
         '/api/v1/status/',
         '/api/v1/unauthorized/',
