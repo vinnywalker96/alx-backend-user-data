@@ -96,7 +96,25 @@ class BasicAuth(Auth):
             if token is not None:
                 decoded = self.decode_base64_authorization_header(token)
                 if decoded is not None:
-                    email, pword = self.extract_user_credentials(decoded)
+                    email, psswd = self.extract_user_credentials(decoded)
                     if email is not None:
-                        return self.user_object_from_credentials(email, pword)
+                        return self.user_object_from_credentials(email, psswd)
         return
+
+    def extract_user_credentials(self, decoded_base64_authorization_header):
+        """Allow password with """
+        auth_header = self.authorization_header(request)
+        if auth_header is None:
+            return None
+        token = self.extract_base64_authorization_header(auth_header)
+        if token is None:
+            return None
+        decode = self.decode_base64_authorization_header(token)
+        if decode is  None:
+            return None
+        email, passwd = self.extract_user_credentials(decode)
+        if ":" in passwd:
+            user = User.search({"email": email})
+            self.is_valid_password(password)
+            return user
+
