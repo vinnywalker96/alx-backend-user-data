@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Sessions"""
 from api.v1.auth.auth import Auth
+from models.user import User
 import uuid
 
 
@@ -32,6 +33,6 @@ class SessionAuth(Auth):
         if request is None:
             return None
         cookie = self.session_cookie(request)
-        user_id = self.user_id_by_session_id(cookie)
+        user_id = self.user_id_for_session_id(cookie)
         user = User.get(user_id)
         return user
