@@ -89,8 +89,6 @@ class BasicAuth(Auth):
             return None
         except Exception:
             return None
-        
-        
         return None
 
     def current_user(self, request=None) -> TypeVar('User'):
