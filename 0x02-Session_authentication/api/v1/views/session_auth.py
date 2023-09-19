@@ -3,9 +3,9 @@
 handles all routes for the Session authentication
 """
 from api.v1.views import app_views
-from flask import jsonify
-from models.user import user
-
+from flask import jsonify, request
+from models.user import User
+import os
 
 @app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
 def auth_session():
