@@ -3,12 +3,16 @@
 from flask import (
         Flask,
         jsonify,
-        request
+        request,
+        abort
         )
+from sqlalchemy.orm.exc import NoResultFound
 from auth import Auth
+from db import DB
 
 app = Flask(__name__)
 AUTH = Auth()
+Db = DB()
 
 
 @app.route("/")
@@ -28,6 +32,27 @@ def register_user():
                 {"message": "email already registered"}
                 ), 400
     return jsonify({"email": f"{email}", "message": "user created"})
+
+
+@app.route("/sessions/", methods=["POST"], strict_slashes=False)
+def login():
+    """Authenticate User"""
+    email = request.form.get("email")
+    password = request.form.get("password")
+    try:
+        user = Db.find_user_by(email=email)
+        if user is not None:
+            is_valid = AUTH.valid_login(email, password)
+            if is_valid:
+                return jsonify(
+                        {
+                            "email": email,
+                            "message": "logged in"
+
+                        }
+                        )
+    except NoResultFound:
+        abort(401)
 
 
 if __name__ == "__main__":
