@@ -39,21 +39,13 @@ def login():
     """Authenticate User"""
     email = request.form.get("email")
     password = request.form.get("password")
-    try:
-        user = Db.find_user_by(email=email)
-        if user is not None:
-            is_valid = AUTH.valid_login(email, password)
-            if is_valid:
-                return jsonify(
-                        {
-                            "email": email,
-                            "message": "logged in"
-
-                        }
-                        )
-    except NoResultFound:
+    user_login = AUTH.valid_login(email, password)
+    if not user_login:
         abort(401)
-
+        session = AUTH.create_session(email)
+        DB.commit()
+    return jsonify({"email": email,"message": "logged in"})
+    
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port="5000")
