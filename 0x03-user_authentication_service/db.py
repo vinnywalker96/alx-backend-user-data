@@ -48,7 +48,7 @@ class DB:
         self._session.commit()
         return user
 
-    def find_user_by(self, **kwargs):
+    def find_user_by(self, **kwargs) -> User:
         """Finds user from database
 
         Args:
@@ -56,13 +56,11 @@ class DB:
         Returns:
             A User object representing the new user.
         """
-        try:
-            user = self._session.query(User).filter_by(
-                **kwargs).first()
-            if user is None:
-                raise NoResultFound("No user found")
-            return user
-        except InvalidRequestError:
-            raise InvalidRequestError("Invalid query arguments")
-
-        return user
+        users = self._session.query(User)
+        for key, val in kwargs.items():
+            if key not in User.__dict__:
+                raise InvalidRequestError
+            for user in users:
+                if getattr(user, key) == val:
+                    return user
+        raise NoResultFound
