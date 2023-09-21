@@ -64,3 +64,20 @@ class DB:
                 if getattr(user, key) == val:
                     return user
         raise NoResultFound
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """Update user Object
+        Args:
+            user_id: the user id
+            **kwargs: dict representing data
+        """
+        try:
+            usr = self.find_user_by(id=user_id)
+        except NoResultFound:
+            raise ValueError()
+        for k, v in kwargs.items():
+            if hasattr(usr, k):
+                setattr(usr, k, v)
+            else:
+                raise ValueError
+        self._session.commit()
