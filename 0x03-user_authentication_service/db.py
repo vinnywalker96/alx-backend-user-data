@@ -36,3 +36,22 @@ class DB:
         self._session.add(user)
         self._session.commit()
         return user
+
+    def find_user_by(self, **kwargs):
+        """Finds user from database
+
+        Args:
+            email: The user's email address.
+        Returns:
+            A User object representing the new user.
+        """
+        try:
+            user = self._session.query(User).filter_by(
+                email=email).first()
+            if user is None:
+                raise NoResultFound("No user found")
+            return user
+        except InvalidRequestError:
+            raise InvalidRequestError("Invalid query arguments")
+
+        return user
