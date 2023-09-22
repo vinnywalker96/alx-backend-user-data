@@ -108,7 +108,7 @@ class Auth:
             user_id: id for the user
         """
         try:
-            user = self._db.find_user_by(user_id=user_id)
-            user.session_id = None
-        except NoResultFound:
+            self._db.find_user_by(user_id, session_id=None)
+        except ValueError:
             return None
+        return None
