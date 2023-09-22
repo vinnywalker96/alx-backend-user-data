@@ -34,8 +34,8 @@ def register_user():
     return jsonify({"email": f"{email}", "message": "user created"})
 
 
-@app.route("/sessions/", methods=["POST"], strict_slashes=False)
-def login():
+@app.route("/sessions", methods=["POST"], strict_slashes=False)
+def login() -> str:
     """Authenticate User"""
     email = request.form.get("email")
     password = request.form.get("password")
