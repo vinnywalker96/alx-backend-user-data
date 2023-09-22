@@ -107,8 +107,7 @@ class Auth:
         Args:
             user_id: id for the user
         """
-        try:
-            self._db.find_user_by(user_id, session_id=None)
-        except ValueError:
+        user = update_user(user_id, session_id=None)
+        if user in None:
             return None
         return None

@@ -9,11 +9,10 @@ from flask import (
         )
 from sqlalchemy.orm.exc import NoResultFound
 from auth import Auth
-from db import DB
+
 
 app = Flask(__name__)
 AUTH = Auth()
-Db = DB()
 
 
 @app.route("/")
