@@ -50,7 +50,7 @@ def login() -> str:
 
 @app.route("/sessions", methods=["DELETE"], strict_slashes=False)
 def logout():
-    session_id = request.cookies.get("session_id")
+    session_id = request.cookies.get("session_id",None)
     user = AUTH.get_user_from_session_id(session_id)
     if user is None or session_id is None:
         abort(403)
@@ -59,4 +59,4 @@ def logout():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port="5000")
+    app.run(host="0.0.0.0", port="5000", debug=True)
