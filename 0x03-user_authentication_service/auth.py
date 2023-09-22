@@ -102,12 +102,16 @@ class Auth:
             return None
 
     def destroy_session(self, user_id: int) -> None:
-        """Detroys Session
-
-        Args:
-            user_id: id for the user
         """
-        user = update_user(user_id, session_id=None)
-        if user in None:
+        Take a user_id and destroy that user's session and update their
+        session_id attribute to None
+        Args:
+            user_id (int): user's id
+        Return:
+            None
+        """
+        try:
+            self._db.update_user(user_id, session_id=None)
+        except ValueError:
             return None
         return None
