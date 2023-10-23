@@ -1,43 +1,39 @@
 #!/usr/bin/env python3
-"""Auth Class """
+""" 3. Auth class
+"""
+
 from flask import request
 from typing import List, TypeVar
-import fnmatch
-import os
 
 
 class Auth:
-    """Class Auth
+    """ Auth class.
     """
 
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
-        """Authenticates pathh"""
-        if path is None or not excluded_paths:
+        """ def require_auth
+        """
+        if not path or not excluded_paths:
             return True
-        path = path.rstrip('/')
-        excluded_paths = [p.rstrip('/') if not p.endswith(
-            '*') else p for p in excluded_paths]
-        for excluded_path in excluded_paths:
-            if excluded_path == '*' or path.startswith(
-                    excluded_path[:-1]):
+        path = path + '/' if path[-1] != '/' else path
+        has_wildcard = any(x.endswith("*") for x in excluded_paths)
+        if not has_wildcard:
+            return path not in excluded_paths
+        for e in excluded_paths:
+            if e.endswith("*"):
+                if path.startswith(e[:-1]):
+                    return False
+            if path == e:
                 return False
         return True
 
     def authorization_header(self, request=None) -> str:
-        """Authorises the header"""
-        if request is None:
-            return None
-        if 'Authorization' not in request.headers:
-            return None
-        return request.headers
+        """ def authorization_header
+        """
+        if request:
+            return request.headers.get("Authorization")
 
     def current_user(self, request=None) -> TypeVar('User'):
-        """gets current_user"""
+        """ def curent_user
+        """
         return None
-
-    def session_cookie(self, request=None):
-        """Returns Cookie"""
-        if request is None:
-            return None
-        session_name = os.getenv('SESSION_NAME')
-        return request.cookies.get(session_name)
